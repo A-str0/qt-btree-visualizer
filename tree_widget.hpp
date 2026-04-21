@@ -1,24 +1,31 @@
 #ifndef TREE_WIDGET_HPP
 #define TREE_WIDGET_HPP
 
-#include <QPainter>
 #include <QWidget>
 
 #include "binary_tree.hpp"
+#include "binary_tree_visualizer.hpp"
+
+#include <memory>
+
+class QPaintEvent;
 
 class TreeWidget final : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TreeWidget(QScopedPointer<QPainter> painter, QWidget* parent = nullptr);
+    explicit TreeWidget(QWidget* parent = nullptr);
 
-    void setTree(QScopedPointer<BinaryTree::Node> root);
+    void setTree(std::unique_ptr<BinaryTree::Node> root);
+    QSize minimumSizeHint() const override;
+    QSize sizeHint() const override;
+
+protected:
+    void paintEvent(QPaintEvent* event) override;
 
 private:
-    QScopedPointer<BinaryTree::Node> m_root;
-    QScopedPointer<QPainter> m_painter;
-
-    void drawNode(QScopedPointer<BinaryTree::Node> node, int x, int y) const;
+    std::unique_ptr<BinaryTree::Node> m_root;
+    BinaryTree::Visualizer m_visualizer;
 };
 
 #endif // TREE_WIDGET_HPP

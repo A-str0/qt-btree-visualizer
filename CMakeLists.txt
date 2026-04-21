@@ -4,24 +4,24 @@ project(course_part2 VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 qt_standard_project_setup(REQUIRES 6.10)
 
 qt_add_executable(appcourse_part2
     main.cpp
-)
-
-qt_add_qml_module(appcourse_part2
-    URI course_part2
-    QML_FILES
-        Main.qml
-        SOURCES json_parser.hpp
-        SOURCES operation_result.hpp
-        SOURCES binary_tree.hpp
-        SOURCES binary_tree_visualizer.hpp
-        SOURCES tree_widget.hpp
+    mainwindow.hpp
+    mainwindow.cpp
+    mainwindow.ui
+    json_parser.hpp
+    operation_result.hpp
+    binary_tree.hpp
+    binary_tree_visualizer.hpp
+    tree_widget.hpp
+    json_parser.cpp
+    binary_tree_visualizer.cpp
+    tree_widget.cpp
+    binary_tree.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -36,7 +36,6 @@ set_target_properties(appcourse_part2 PROPERTIES
 )
 
 target_link_libraries(appcourse_part2
-    PRIVATE Qt6::Quick
     PRIVATE Qt6::Widgets
 )
 

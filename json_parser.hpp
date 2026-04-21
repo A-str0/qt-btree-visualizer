@@ -1,6 +1,8 @@
 #ifndef JSON_PARSER_HPP
 #define JSON_PARSER_HPP
 
+#include <QJsonDocument>
+
 #include "binary_tree.hpp"
 #include "operation_result.hpp"
 

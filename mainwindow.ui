@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>980</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Binary Tree Viewer</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>10</number>
+    </property>
+    <property name="leftMargin">
+     <number>12</number>
+    </property>
+    <property name="topMargin">
+     <number>12</number>
+    </property>
+    <property name="rightMargin">
+     <number>12</number>
+    </property>
+    <property name="bottomMargin">
+     <number>12</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="titleLabel">
+      <property name="text">
+       <string>Select a JSON file with a binary tree and press Load.</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="fileLayout">
+      <item>
+       <widget class="QLabel" name="fileLabel">
+        <property name="text">
+         <string>JSON file:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="filePathEdit">
+        <property name="placeholderText">
+         <string>/path/to/tree.json</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="browseButton">
+        <property name="text">
+         <string>Browse...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="controlsLayout">
+      <item>
+       <widget class="QPushButton" name="loadButton">
+        <property name="text">
+         <string>Load File</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="statusLabel">
+        <property name="text">
+         <string>Status</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QScrollArea" name="treeScrollArea">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="widgetResizable">
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>200</width>
+         <height>120</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
