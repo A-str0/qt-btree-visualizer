@@ -31,16 +31,6 @@
      <number>12</number>
     </property>
     <item>
-     <widget class="QLabel" name="titleLabel">
-      <property name="text">
-       <string>Select a JSON file with a binary tree and press Load.</string>
-      </property>
-      <property name="wordWrap">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
      <layout class="QHBoxLayout" name="fileLayout">
       <item>
        <widget class="QLabel" name="fileLabel">
@@ -69,36 +59,18 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="controlsLayout">
-      <item>
-       <widget class="QPushButton" name="loadButton">
-        <property name="text">
-         <string>Load File</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="statusLabel">
-        <property name="text">
-         <string>Status</string>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <layout class="QHBoxLayout" name="controlsLayout"/>
     </item>
     <item>
      <widget class="QScrollArea" name="treeScrollArea">
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::Shape::StyledPanel</enum>
       </property>
       <property name="widgetResizable">
        <bool>false</bool>
       </property>
       <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
       </property>
       <widget class="QWidget" name="scrollAreaWidgetContents">
        <property name="geometry">
