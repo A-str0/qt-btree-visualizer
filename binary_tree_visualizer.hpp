@@ -1,22 +1,19 @@
 #ifndef BINARY_TREE_VISUALIZER_HPP
 #define BINARY_TREE_VISUALIZER_HPP
 
-#include <QPoint>
-#include <QRect>
-#include <QSize>
-#include <QString>
+#include <QSizeF>
 
 #include "binary_tree.hpp"
 
-class QPainter;
+class QGraphicsScene;
 
 namespace BinaryTree {
 
 class Visualizer
 {
 public:
-    void draw(QPainter& painter, const Node* root, const QRect& bounds) const;
-    QSize sizeHint(const Node* root) const;
+    void buildScene(QGraphicsScene* scene, const Node* root) const;
+    QSizeF sizeHint(const Node* root) const;
 
 private:
     static constexpr int kNodeWidth = 60;
@@ -25,8 +22,7 @@ private:
     static constexpr int kLevelHeight = 72;
     static constexpr int kMargin = 24;
 
-    void drawSubtree(QPainter& painter, const Node* node, int depth, int left, int right, int top) const;
-    void drawNode(QPainter& painter, const Node* node, const QPoint& center) const;
+    void addSubtree(QGraphicsScene* scene, const Node* node, int depth, int left, int right, int top) const;
     int leafSlotCount(int height) const;
     QString nodeLabel(const Node& node) const;
 };

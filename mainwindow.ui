@@ -61,29 +61,16 @@
     <item>
      <layout class="QHBoxLayout" name="controlsLayout"/>
     </item>
-    <item>
-     <widget class="QScrollArea" name="treeScrollArea">
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="widgetResizable">
-       <bool>false</bool>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>200</width>
-         <height>120</height>
-        </rect>
+     <item>
+      <widget class="QWidget" name="treeContainer">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>1</verstretch>
+        </sizepolicy>
        </property>
       </widget>
-     </widget>
-    </item>
+     </item>
    </layout>
   </widget>
  </widget>

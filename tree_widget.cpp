@@ -1,41 +1,23 @@
 #include "tree_widget.hpp"
 
-#include <QPaintEvent>
-#include <QPainter>
-#include <QPalette>
+#include <QGraphicsScene>
 
 TreeWidget::TreeWidget(QWidget* parent)
-    : QWidget(parent)
+    : QGraphicsView(parent)
+    , m_scene(new QGraphicsScene(this))
 {
-    setAutoFillBackground(true);
+    setScene(m_scene);
+    setRenderHint(QPainter::Antialiasing, true);
+    setAlignment(Qt::AlignLeft | Qt::AlignTop);
 }
 
 void TreeWidget::setTree(std::unique_ptr<BinaryTree::Node> root)
 {
     m_root = std::move(root);
-    updateGeometry();
-    update();
-}
+    m_scene->clear();
 
-QSize TreeWidget::minimumSizeHint() const { return m_visualizer.sizeHint(m_root.get()); }
-
-QSize TreeWidget::sizeHint() const { return minimumSizeHint(); }
-
-void TreeWidget::paintEvent(QPaintEvent* event)
-{
-    QWidget::paintEvent(event);
-
-    QPainter painter(this);
-    painter.fillRect(rect(), palette().brush(QPalette::Base));
-
-    if (!m_root) {
-        painter.setPen(palette().color(QPalette::Mid));
-        painter.drawText(
-            rect().adjusted(16, 16, -16, -16),
-            Qt::AlignCenter,
-            tr("Load a JSON file to display the tree."));
-        return;
+    if (m_root) {
+        m_visualizer.buildScene(m_scene, m_root.get());
+        m_scene->setSceneRect(m_scene->itemsBoundingRect().adjusted(-24, -24, 24, 24));
     }
-
-    m_visualizer.draw(painter, m_root.get(), rect());
 }

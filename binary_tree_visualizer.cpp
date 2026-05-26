@@ -1,39 +1,41 @@
 #include "binary_tree_visualizer.hpp"
 
-#include <QFontMetrics>
+#include <QGraphicsLineItem>
+#include <QGraphicsScene>
 #include <QMetaType>
-#include <QPainter>
 #include <QPen>
+
+#include "tree_node_item.hpp"
 
 #include <algorithm>
 #include <limits>
 
 namespace BinaryTree {
 
-void Visualizer::draw(QPainter& painter, const Node* root, const QRect& bounds) const
+void Visualizer::buildScene(QGraphicsScene* scene, const Node* root) const
 {
     if (!root)
         return;
 
-    painter.save();
-    painter.setRenderHint(QPainter::Antialiasing, true);
+    const QSizeF totalSize = sizeHint(root);
+    const QRectF drawingBounds(
+        kMargin, kMargin,
+        totalSize.width() - 2.0 * kMargin,
+        totalSize.height() - 2.0 * kMargin);
 
-    const QRect drawingBounds = bounds.adjusted(kMargin, kMargin, -kMargin, -kMargin);
-    drawSubtree(
-        painter,
+    addSubtree(
+        scene,
         root,
         0,
-        drawingBounds.left(),
-        drawingBounds.right(),
-        drawingBounds.top());
-
-    painter.restore();
+        static_cast<int>(drawingBounds.left()),
+        static_cast<int>(drawingBounds.right()),
+        static_cast<int>(drawingBounds.top()));
 }
 
-QSize Visualizer::sizeHint(const Node* root) const
+QSizeF Visualizer::sizeHint(const Node* root) const
 {
     if (!root)
-        return QSize((kMargin * 2) + kNodeWidth, (kMargin * 2) + kNodeHeight);
+        return QSizeF((kMargin * 2) + kNodeWidth, (kMargin * 2) + kNodeHeight);
 
     const int height = root->height();
     const long long leafCount = leafSlotCount(height);
@@ -44,13 +46,13 @@ QSize Visualizer::sizeHint(const Node* root) const
         + kNodeHeight
         + (static_cast<long long>(height - 1) * kLevelHeight);
 
-    return QSize(
-        static_cast<int>(std::min(totalWidth, static_cast<long long>(std::numeric_limits<int>::max()))),
-        static_cast<int>(std::min(totalHeight, static_cast<long long>(std::numeric_limits<int>::max()))));
+    return QSizeF(
+        static_cast<qreal>(std::min(totalWidth, static_cast<long long>(std::numeric_limits<int>::max()))),
+        static_cast<qreal>(std::min(totalHeight, static_cast<long long>(std::numeric_limits<int>::max()))));
 }
 
-void Visualizer::drawSubtree(
-    QPainter& painter,
+void Visualizer::addSubtree(
+    QGraphicsScene* scene,
     const Node* node,
     int depth,
     int left,
@@ -62,53 +64,43 @@ void Visualizer::drawSubtree(
 
     const int centerX = left + ((right - left) / 2);
     const int centerY = top + (depth * kLevelHeight) + (kNodeHeight / 2);
-    const QPoint center(centerX, centerY);
+    const QPointF center(centerX, centerY);
     const int middle = left + ((right - left) / 2);
     const int childCenterY = top + ((depth + 1) * kLevelHeight) + (kNodeHeight / 2);
+    const QColor edgeColor(QStringLiteral("#9CA3AF"));
+    const QPen edgePen(edgeColor, 1);
 
     if (node->left) {
         const int childLeft = left;
         const int childRight = middle;
         const int childCenterX = childLeft + ((childRight - childLeft) / 2);
-        const QPoint childCenter(childCenterX, childCenterY);
-        painter.setPen(QPen(QColor(QStringLiteral("#9CA3AF")), 1));
-        painter.drawLine(
-            QPoint(center.x(), center.y() + (kNodeHeight / 2)),
-            QPoint(childCenter.x(), childCenter.y() - (kNodeHeight / 2)));
-        drawSubtree(painter, node->left.get(), depth + 1, childLeft, childRight, top);
+
+        auto* line = scene->addLine(
+            center.x(), center.y() + (kNodeHeight / 2),
+            childCenterX, childCenterY - (kNodeHeight / 2),
+            edgePen);
+        line->setZValue(-1);
+
+        addSubtree(scene, node->left.get(), depth + 1, childLeft, childRight, top);
     }
 
     if (node->right) {
         const int childLeft = middle;
         const int childRight = right;
         const int childCenterX = childLeft + ((childRight - childLeft) / 2);
-        const QPoint childCenter(childCenterX, childCenterY);
-        painter.setPen(QPen(QColor(QStringLiteral("#9CA3AF")), 1));
-        painter.drawLine(
-            QPoint(center.x(), center.y() + (kNodeHeight / 2)),
-            QPoint(childCenter.x(), childCenter.y() - (kNodeHeight / 2)));
-        drawSubtree(painter, node->right.get(), depth + 1, childLeft, childRight, top);
+
+        auto* line = scene->addLine(
+            center.x(), center.y() + (kNodeHeight / 2),
+            childCenterX, childCenterY - (kNodeHeight / 2),
+            edgePen);
+        line->setZValue(-1);
+
+        addSubtree(scene, node->right.get(), depth + 1, childLeft, childRight, top);
     }
 
-    drawNode(painter, node, center);
-}
-
-void Visualizer::drawNode(QPainter& painter, const Node* node, const QPoint& center) const
-{
-    const QRect nodeRect(
-        center.x() - (kNodeWidth / 2),
-        center.y() - (kNodeHeight / 2),
-        kNodeWidth,
-        kNodeHeight);
-
-    painter.setPen(QPen(QColor(QStringLiteral("#111827")), 1));
-    painter.setBrush(QColor(QStringLiteral("#FFFFFF")));
-    painter.drawRect(nodeRect);
-
-    const QFontMetrics metrics(painter.font());
-    const QString label = metrics.elidedText(nodeLabel(*node), Qt::ElideMiddle, kNodeWidth - 12);
-    painter.setPen(QColor(QStringLiteral("#111827")));
-    painter.drawText(nodeRect, Qt::AlignCenter, label);
+    auto* item = new TreeNodeItem(nodeLabel(*node), center);
+    item->setZValue(0);
+    scene->addItem(item);
 }
 
 int Visualizer::leafSlotCount(int height) const

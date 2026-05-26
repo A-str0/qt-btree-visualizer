@@ -5,10 +5,10 @@
 
 #include <QFile>
 #include <QFileDialog>
+#include <QVBoxLayout>
 #include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonParseError>
-#include <QScrollArea>
 
 #include <memory>
 
@@ -19,8 +19,9 @@ MainWindow::MainWindow(QWidget* parent)
 {
     ui->setupUi(this);
 
-    ui->treeScrollArea->setWidget(m_treeWidget);
-    ui->treeScrollArea->setWidgetResizable(false);
+    auto* containerLayout = new QVBoxLayout(ui->treeContainer);
+    containerLayout->setContentsMargins(0, 0, 0, 0);
+    containerLayout->addWidget(m_treeWidget);
 
     connect(ui->browseButton, &QPushButton::clicked, this, &MainWindow::browseJsonFile);
     connect(ui->filePathEdit, &QLineEdit::returnPressed, this, &MainWindow::loadTreeFromCurrentPath);
@@ -89,11 +90,9 @@ void MainWindow::loadTreeFromCurrentPath()
     auto root = std::make_unique<BinaryTree::Node>(std::move(result.value));
 
     m_treeWidget->setTree(std::move(root));
-    m_treeWidget->adjustSize();
 }
 
 void MainWindow::clearTree()
 {
     m_treeWidget->setTree(nullptr);
-    m_treeWidget->adjustSize();
 }

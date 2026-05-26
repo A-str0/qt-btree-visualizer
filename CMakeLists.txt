@@ -22,6 +22,8 @@ qt_add_executable(appcourse_part2
     binary_tree_visualizer.cpp
     tree_widget.cpp
     binary_tree.cpp
+    tree_node_item.hpp
+    tree_node_item.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
